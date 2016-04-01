@@ -1,0 +1,2 @@
+Entrega 1.
+Comi bola aqui, havia esquecido de fazer o push depois de trocar o namespace rs.
