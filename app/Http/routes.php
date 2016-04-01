@@ -12,5 +12,6 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    echo database_path();
+    //return view('welcome');
 });
