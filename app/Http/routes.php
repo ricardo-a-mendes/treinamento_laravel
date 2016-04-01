@@ -11,7 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    echo database_path();
-    //return view('welcome');
-});
+Route::get('/', 'CategoryController@index');
