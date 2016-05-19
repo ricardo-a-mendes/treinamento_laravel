@@ -1,11 +1,14 @@
 <?php
 
-namespace CodeCommerce\Http\Controllers;
+namespace CodeCommerce\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
+
+use CodeCommerce\Http\Requests;
 use CodeCommerce\Category;
-//use function view;
+use CodeCommerce\Http\Controllers\Controller;
 
-class CategoryController extends Controller
+class AdminCategoryController extends Controller
 {
     private $category;
     public function __construct(Category $category)

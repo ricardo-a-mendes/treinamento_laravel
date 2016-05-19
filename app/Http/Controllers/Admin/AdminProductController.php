@@ -1,13 +1,15 @@
 <?php
 
-namespace CodeCommerce\Http\Controllers;
+namespace CodeCommerce\Http\Controllers\Admin;
+
 
 use CodeCommerce\Product;
 use Illuminate\Http\Request;
 
 use CodeCommerce\Http\Requests;
+use CodeCommerce\Http\Controllers\Controller;
 
-class ProductController extends Controller
+class AdminProductController extends Controller
 {
     private $product;
 
