@@ -11,6 +11,14 @@
 |
 */
 
-//Route::get('/', 'CategoryController@index');
-Route::get('/admin/categories', 'Admin\AdminCategoryController@index');
-Route::get('/admin/products', 'Admin\AdminProductController@index');
+Route::pattern('id', '\d+');
+Route::group(['prefix' => 'admin'], function(){
+
+    #Categories
+    Route::get('categories', 'Admin\AdminCategoryController@index')->name('categoryList');
+    Route::get('category/edit/{id}', 'Admin\AdminCategoryController@edit')->name('categoryEdit');
+
+    #Products
+    Route::get('products', 'Admin\AdminProductController@index')->name('productList');
+    Route::get('product/edit/{id}', 'Admin\AdminProductController@edit')->name('productEdit');
+});

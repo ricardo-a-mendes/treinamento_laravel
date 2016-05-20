@@ -4,6 +4,7 @@ namespace CodeCommerce\Http\Controllers\Admin;
 
 
 use CodeCommerce\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 use CodeCommerce\Http\Requests;
@@ -22,5 +23,16 @@ class AdminProductController extends Controller
     {
         $products = $this->product->all();
         return view('product', compact('products'));
+    }
+
+    public function edit($id)
+    {
+        try {
+            dd($this->product->findOrFail($id));
+        }
+        catch (ModelNotFoundException $e)
+        {
+            echo 'Registro Não Localizado';
+        }
     }
 }
