@@ -32,7 +32,13 @@ class AdminProductController extends Controller
 
     public function create(Requests\Admin\ProductRequest $request)
     {
-        $this->product->fill($request->all())->save();
+        $dataCreate = $request->all();
+
+        //Checkbox may not come on REQUEST (unchecked case)
+        $dataCreate['featured'] = (int)(key_exists('featured', $dataCreate));
+        $dataCreate['recommend'] = (int)(key_exists('recommend', $dataCreate));
+
+        $this->product->fill($dataCreate)->save();
         return redirect()->route('productList');
     }
 
@@ -49,7 +55,13 @@ class AdminProductController extends Controller
     public function update(Requests\Admin\ProductRequest $request, $id)
     {
         try {
-            $this->product->findOrFail($id)->fill($request->all())->save();
+            $dataUpdate = $request->all();
+
+            //Checkbox may not come on REQUEST (unchecked case)
+            $dataUpdate['featured'] = (int)(key_exists('featured', $dataUpdate));
+            $dataUpdate['recommend'] = (int)(key_exists('recommend', $dataUpdate));
+
+            $this->product->findOrFail($id)->fill($dataUpdate)->save();
             return redirect()->route('productList');
         } catch (ModelNotFoundException $e) {
             echo 'Registro não localizado para ser editado';
@@ -58,13 +70,11 @@ class AdminProductController extends Controller
 
     public function delete($id)
     {
-
         try {
-            $this->product->findOsFail($id)->delete();
+            $this->product->findOrFail($id)->delete();
             return redirect()->route('productList');
         } catch (ModelNotFoundException $e) {
             echo 'Registro não localizado para ser deletado';
         }
-
     }
 }
