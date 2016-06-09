@@ -18,6 +18,10 @@
                 {!! Form::text('name', $product->name, ['class' => 'form-control']) !!}
             </div>
             <div class="form-group">
+                {!! Form::label('category_id', 'Category') !!}
+                {!! Form::select('category_id', $categories,  $product->category->id, ['class' => 'form-control']) !!}
+            </div>
+            <div class="form-group">
                 {!! Form::label('description', 'Description') !!}
                 {!! Form::textarea('description', $product->description, ['class' => 'form-control']) !!}
             </div>

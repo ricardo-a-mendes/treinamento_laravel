@@ -12,6 +12,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Price</th>
+                    <th>Category</th>
                     <th>Action</th>
                 </tr>
                 @foreach($products as $product)
@@ -20,6 +21,7 @@
                     <td>{{$product->name}}</td>
                     <td>{{$product->description}}</td>
                     <td>R$ {{number_format($product->price, 2, ',', '.')}}</td>
+                    <td>{{$product->category->name}}</td>
                     <td>
                         <a href="{{route('productEdit', ['id' => $product->id])}}">Edit</a> |
                         <a href="{{route('productDelete', ['id' => $product->id])}}">Delete</a>
@@ -27,6 +29,7 @@
                 </tr>
                 @endforeach
             </table>
+            {!! $products->render() !!}
         </div>
     </div>
 @endsection

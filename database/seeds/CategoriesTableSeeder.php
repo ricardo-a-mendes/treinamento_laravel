@@ -1,6 +1,7 @@
 <?php
 
 use CodeCommerce\Category;
+use CodeCommerce\Product;
 use Illuminate\Database\Seeder;
 
 class CategoriesTableSeeder extends Seeder
@@ -12,7 +13,14 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->truncate();
-        factory(Category::class, 10)->create();
+        DB::table('products')->delete();
+        DB::table('categories')->delete();
+        
+        factory(Category::class, 30)->create()->each(function (Category $createdCategory) {
+            for ($i = 0; $i < 5; $i++) {
+                $productModel = factory(Product::class)->make();
+                $createdCategory->products()->save($productModel);
+            }
+        });
     }
 }

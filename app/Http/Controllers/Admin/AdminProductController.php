@@ -3,6 +3,7 @@
 namespace CodeCommerce\Http\Controllers\Admin;
 
 
+use CodeCommerce\Category;
 use CodeCommerce\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -21,13 +22,14 @@ class AdminProductController extends Controller
 
     public function index()
     {
-        $products = $this->product->all();
+        $products = $this->product->paginate(10);
         return view('admin.product.index', compact('products'));
     }
 
-    public function add()
+    public function add(Category $category)
     {
-        return view('admin.product.create');
+        $categories = $category->lists('name', 'id');
+        return view('admin.product.create', compact('categories'));
     }
 
     public function create(Requests\Admin\ProductRequest $request)
@@ -42,11 +44,12 @@ class AdminProductController extends Controller
         return redirect()->route('productList');
     }
 
-    public function edit($id)
+    public function edit(Category $category, $id)
     {
         try {
+            $categories = $category->lists('name', 'id');
             $product = $this->product->findOrFail($id);
-            return view('admin.product.update', compact('product'));
+            return view('admin.product.update', compact('product', 'categories'));
         } catch (ModelNotFoundException $e) {
             echo 'Registro Não Localizado';
         }
