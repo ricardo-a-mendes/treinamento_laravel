@@ -1,6 +1,6 @@
-@extends('base')
+@extends('layouts.app')
 @section('content')
-    <div class="content">
+    <div class="container">
         <div class="row">
             <h1>Products</h1>
             <a href="{{route('productAdd')}}" class="btn btn-default">New Product</a>
@@ -24,6 +24,7 @@
                     <td>{{$product->category->name}}</td>
                     <td>
                         <a href="{{route('productEdit', ['id' => $product->id])}}">Edit</a> |
+                        <a href="{{route('productImages', ['id' => $product->id])}}">Images</a> |
                         <a href="{{route('productDelete', ['id' => $product->id])}}">Delete</a>
                     </td>
                 </tr>

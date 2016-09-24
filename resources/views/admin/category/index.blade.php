@@ -1,6 +1,6 @@
-@extends('base')
+@extends('layouts.app')
 @section('content')
-    <div class="content">
+    <div class="container">
         <div class="row">
             <h1>Categories</h1>
             <a href="{{route('categoryAdd')}}" class="btn btn-default">New Category</a>

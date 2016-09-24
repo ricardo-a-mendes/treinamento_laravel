@@ -1,9 +1,9 @@
-@extends('base')
+@extends('layouts.app')
 @section('content')
-    <div class="content">
+    <div class="container">
         <div class="row">
             <h1>Images of {{$product->name}}</h1>
-            <a href="" class="btn btn-default">New Image</a>
+            <a href="{{route('productImagesCreate', ['id'=>$product->id])}}" class="btn btn-default">New Image</a>
             <br>
             <br>
             <table class="table">
@@ -15,15 +15,14 @@
                 </tr>
                 @foreach($product->images as $image)
                 <tr>
-
                     <td>{{$image->id}}</td>
-                    <td>IMAGEM</td>
+                    <td><img src="{{url('uploads/'.$image->id.'.'.$image->extension)}}" width="80"></td>
                     <td>{{$image->extension}}</td>
-                    <td>&nbsp;</td>
+                    <td><a href="{{route('productImagesDelete', ['id' => $image->id])}}" class="btn btn-sm btn-danger">Delete</a></td>
                 </tr>
                 @endforeach
             </table>
-
+            <a href="{{route('productList')}}" class="btn btn-default">Back</a>
         </div>
     </div>
 @endsection

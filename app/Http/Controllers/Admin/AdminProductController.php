@@ -4,13 +4,12 @@ namespace CodeCommerce\Http\Controllers\Admin;
 
 
 use CodeCommerce\Category;
+use CodeCommerce\Http\Controllers\Controller;
+use CodeCommerce\Http\Requests;
+use CodeCommerce\Http\Requests\Admin\ProductImageRequest;
 use CodeCommerce\Product;
 use CodeCommerce\ProductImage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-
-use CodeCommerce\Http\Requests;
-use CodeCommerce\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -102,15 +101,33 @@ class AdminProductController extends Controller
         return view('admin.product.create_image', compact('product'));
     }
 
-    public function storeImage(Request $request, $id, ProductImage $productImage)
+    public function storeImage(ProductImageRequest $request, $id, ProductImage $productImage)
     {
         $file = $request->file('image');
         $extension = $file->getClientOriginalExtension();
 
         $image = $productImage::create(['product_id' => $id, 'extension' => $extension]);
 
-        Storage::disk('public_local')->put($image->id.'.'.$extension, File::get($file));
+        Storage::disk('public_local')->put($image->id . '.' . $extension, File::get($file));
 
         return redirect()->route('productImages', ['id' => $id]);
+    }
+
+    public function deleteImage(ProductImage $productImage, $id)
+    {
+        try {
+            $image = $productImage->findOrFail($id);
+            $imageName = $image->id . '.' . $image->extension;
+
+            //Unlink the image
+            if (file_exists(public_path('/uploads/' . $imageName)))
+                Storage::disk('public_local')->delete($imageName);
+
+            $product = $image->product;
+            $image->delete();
+            return redirect()->route('productImages', ['id' => $product->id]);
+        } catch (ModelNotFoundException $e) {
+            echo $e->getMessage();
+        }
     }
 }

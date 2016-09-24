@@ -1,6 +1,6 @@
 @extends('base')
 @section('content')
-    <div class="content">
+    <div class="container">
         <div class="row">
             <h1>Products Form</h1>
 
