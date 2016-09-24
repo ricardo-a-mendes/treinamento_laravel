@@ -11,7 +11,7 @@
 |
 */
 
-Route::pattern('id', '\d+');
+//Route::pattern('id', '\d+');
 Route::group(['prefix' => 'admin'], function(){
 
     #Categories
@@ -29,9 +29,18 @@ Route::group(['prefix' => 'admin'], function(){
     Route::group(['prefix' => 'products'], function() {
         Route::get('/', 'Admin\AdminProductController@index')->name('productList');
         Route::post('/', 'Admin\AdminProductController@create')->name('productCreate');
-        Route::put('supdate/{id}', 'Admin\AdminProductController@update')->name('productUpdate');
+        Route::put('update/{id}', 'Admin\AdminProductController@update')->name('productUpdate');
         Route::get('add', 'Admin\AdminProductController@add')->name('productAdd');
         Route::get('edit/{id}', 'Admin\AdminProductController@edit')->name('productEdit');
         Route::get('delete/{id}', 'Admin\AdminProductController@delete')->name('productDelete');
+
+        Route::get('{id}/images', 'Admin\AdminProductController@images')->name('productImages');
+        Route::get('{id}/image/create', 'Admin\AdminProductController@createImage')->name('productImagesCreate');
+        Route::post('{id}/image/store', 'Admin\AdminProductController@storeImage')->name('productImagesStore');
+        /*
+        Route::group(['prefix' => 'images'], function() {
+
+        });
+        */
     });
 });
