@@ -25,15 +25,15 @@ class AdminCategoryController extends Controller
         return view('admin.category.index', compact('categories'));
     }
 
-    public function add()
+    public function create()
     {
         return view('admin.category.create');
     }
 
-    public function create(Requests\Admin\CategoryRequest $request)
+    public function store(Requests\Admin\CategoryRequest $request)
     {
         $this->category->fill($request->all())->save();
-        return redirect()->route('categoryList');
+        return redirect()->route('admin.category.index');
     }
 
     public function edit($id)
@@ -50,17 +50,21 @@ class AdminCategoryController extends Controller
     {
         try {
             $this->category->findOrFail($id)->fill($request->all())->save();
-            return redirect()->route('categoryList');
+            return redirect()->route('admin.category.index');
         } catch (ModelNotFoundException $e) {
             echo 'Registro não localizado para ser editado';
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         try {
-            $this->category->findOrFail($id)->delete();
-            return redirect()->route('categoryList');
+            $category = $this->category->findOrFail($id);
+            if (count($category->products) > 0)
+                die('Produtos relacionados... Não é possivel excluir esta categoria!');
+            else
+                $category->delete();
+            return redirect()->route('admin.category.index');
         } catch (ModelNotFoundException $e) {
             echo 'Registro não localizado para ser deletado';
         }

@@ -28,13 +28,13 @@ class AdminProductController extends Controller
         return view('admin.product.index', compact('products'));
     }
 
-    public function add(Category $category)
+    public function create(Category $category)
     {
         $categories = $category->lists('name', 'id');
         return view('admin.product.create', compact('categories'));
     }
 
-    public function create(Requests\Admin\ProductRequest $request)
+    public function store(Requests\Admin\ProductRequest $request)
     {
         $dataCreate = $request->all();
 
@@ -43,7 +43,7 @@ class AdminProductController extends Controller
         $dataCreate['recommend'] = (int)(key_exists('recommend', $dataCreate));
 
         $this->product->fill($dataCreate)->save();
-        return redirect()->route('productList');
+        return redirect()->route('admin.product.index');
     }
 
     public function edit(Category $category, $id)
@@ -67,17 +67,23 @@ class AdminProductController extends Controller
             $dataUpdate['recommend'] = (int)(key_exists('recommend', $dataUpdate));
 
             $this->product->findOrFail($id)->fill($dataUpdate)->save();
-            return redirect()->route('productList');
+            return redirect()->route('admin.product.index');
         } catch (ModelNotFoundException $e) {
             echo 'Registro não localizado para ser editado';
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         try {
-            $this->product->findOrFail($id)->delete();
-            return redirect()->route('productList');
+            $product = $this->product->findOrFail($id);
+            if (count($product->images) > 0) {
+                $productImage = new ProductImage();
+                foreach ($product->images as $image)
+                    $this->destroyImage($productImage, $image->id);
+            }
+            $product->delete();
+            return redirect()->route('admin.product.index');
         } catch (ModelNotFoundException $e) {
             echo 'Registro não localizado para ser deletado';
         }
@@ -110,10 +116,10 @@ class AdminProductController extends Controller
 
         Storage::disk('public_local')->put($image->id . '.' . $extension, File::get($file));
 
-        return redirect()->route('productImages', ['id' => $id]);
+        return redirect()->route('admin.product.image.index', ['id' => $id]);
     }
 
-    public function deleteImage(ProductImage $productImage, $id)
+    public function destroyImage(ProductImage $productImage, $id)
     {
         try {
             $image = $productImage->findOrFail($id);
@@ -125,7 +131,7 @@ class AdminProductController extends Controller
 
             $product = $image->product;
             $image->delete();
-            return redirect()->route('productImages', ['id' => $product->id]);
+            return redirect()->route('admin.product.image.index', ['id' => $product->id]);
         } catch (ModelNotFoundException $e) {
             echo $e->getMessage();
         }

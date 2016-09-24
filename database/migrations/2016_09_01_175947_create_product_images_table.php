@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductImagesTable extends Migration
+class Createadmin.product.image.indexTable extends Migration
 {
     /**
      * Run the migrations.

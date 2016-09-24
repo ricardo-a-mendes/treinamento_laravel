@@ -12,7 +12,7 @@
                 </ul>
             @endif
 
-            {!! Form::open(['route' => ['productImagesStore', $product->id], 'method' => 'POST', 'enctype'=>"multipart/form-data"]) !!}
+            {!! Form::open(['route' => ['admin.product.image.store', $product->id], 'method' => 'POST', 'enctype'=>"multipart/form-data"]) !!}
             <div class="form-group">
                 {!! Form::label('image', 'Image') !!}
                 {!! Form::file('image', null, ['class' => 'form-control']) !!}

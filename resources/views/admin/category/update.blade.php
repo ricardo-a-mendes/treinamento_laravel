@@ -12,7 +12,7 @@
                 </ul>
             @endif
 
-            {!! Form::open(['route' => ['categoryUpdate', $category->id], 'method' => 'PUT']) !!}
+            {!! Form::open(['route' => ['admin.category.update', $category->id], 'method' => 'PUT']) !!}
             <div class="form-group">
                 {!! Form::label('name', 'Name') !!}
                 {!! Form::text('name', $category->name, ['class' => 'form-control']) !!}

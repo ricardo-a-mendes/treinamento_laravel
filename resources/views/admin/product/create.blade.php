@@ -12,7 +12,7 @@
                 </ul>
             @endif
 
-            {!! Form::open(['route' => ['productCreate'], 'method' => 'POST']) !!}
+            {!! Form::open(['route' => ['admin.product.store'], 'method' => 'POST']) !!}
             <div class="form-group">
                 {!! Form::label('name', 'Name') !!}
                 {!! Form::text('name', null, ['class' => 'form-control']) !!}
