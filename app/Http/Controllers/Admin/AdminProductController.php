@@ -114,7 +114,7 @@ class AdminProductController extends Controller
 
         $image = $productImage::create(['product_id' => $id, 'extension' => $extension]);
 
-        Storage::disk('public_local')->put($image->id . '.' . $extension, File::get($file));
+        Storage::disk('public_local')->put($image->full_name, File::get($file));
 
         return redirect()->route('admin.product.image.index', ['id' => $id]);
     }
@@ -123,11 +123,10 @@ class AdminProductController extends Controller
     {
         try {
             $image = $productImage->findOrFail($id);
-            $imageName = $image->id . '.' . $image->extension;
 
             //Unlink the image
-            if (file_exists(public_path('/uploads/' . $imageName)))
-                Storage::disk('public_local')->delete($imageName);
+            if (file_exists(public_path('/uploads/' . $image->full_name)))
+                Storage::disk('public_local')->delete($image->full_name);
 
             $product = $image->product;
             $image->delete();
