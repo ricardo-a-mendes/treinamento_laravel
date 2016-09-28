@@ -1,4 +1,7 @@
-@extends('base')
+@extends('layouts.app')
+@section('css')
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-tagsinput.css')}}" />
+@endsection
 @section('content')
     <div class="container">
         <div class="row">
@@ -29,6 +32,12 @@
                 {!! Form::label('price', 'Price') !!}
                 {!! Form::text('price', null, ['class' => 'form-control']) !!}
             </div>
+
+            <div class="form-group">
+                {!! Form::label('tags', 'Tags') !!}<br>
+                {!! Form::text('tags', '', ['class' => 'form-control', 'data-role' => 'tagsinput', 'placeholder' => 'Write a Tag and press Enter']) !!}
+            </div>
+
             <div class="form-group">
                 {!! Form::label('featured', 'Featured') !!}
                 {!! Form::checkbox('featured', 1, false) !!}
@@ -46,4 +55,7 @@
             {!! Form::close() !!}
         </div>
     </div>
+@endsection
+@section('js')
+    <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
 @endsection
