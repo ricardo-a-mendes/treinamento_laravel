@@ -16,7 +16,7 @@
                 @foreach($product->images as $image)
                 <tr>
                     <td>{{$image->id}}</td>
-                    <td><img src="{{url('uploads/'.$image->id.'.'.$image->extension)}}" width="80"></td>
+                    <td><img src="{{url('uploads/'.$image->full_name)}}" width="80"></td>
                     <td>{{$image->extension}}</td>
                     <td><a href="{{route('admin.product.image.destroy', ['id' => $image->id])}}" class="btn btn-sm btn-danger">Delete</a></td>
                 </tr>

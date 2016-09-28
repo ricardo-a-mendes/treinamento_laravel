@@ -9,6 +9,7 @@ use CodeCommerce\Http\Requests;
 use CodeCommerce\Http\Requests\Admin\ProductImageRequest;
 use CodeCommerce\Product;
 use CodeCommerce\ProductImage;
+use CodeCommerce\Tag;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -42,7 +43,12 @@ class AdminProductController extends Controller
         $dataCreate['featured'] = (int)(key_exists('featured', $dataCreate));
         $dataCreate['recommend'] = (int)(key_exists('recommend', $dataCreate));
 
-        $this->product->fill($dataCreate)->save();
+        $product = $this->product->fill($dataCreate);
+        $product->save();
+
+        $arrTagID = $this->handleTags($request->input('tags'), $product);
+        $product->tags()->sync($arrTagID);
+
         return redirect()->route('admin.product.index');
     }
 
@@ -66,7 +72,12 @@ class AdminProductController extends Controller
             $dataUpdate['featured'] = (int)(key_exists('featured', $dataUpdate));
             $dataUpdate['recommend'] = (int)(key_exists('recommend', $dataUpdate));
 
-            $this->product->findOrFail($id)->fill($dataUpdate)->save();
+            $product = $this->product->findOrFail($id)->fill($dataUpdate);
+            $product->save();
+
+            $arrTagID = $this->handleTags($request->input('tags'), $product);
+            $product->tags()->sync($arrTagID);
+
             return redirect()->route('admin.product.index');
         } catch (ModelNotFoundException $e) {
             echo 'Registro não localizado para ser editado';
@@ -87,6 +98,36 @@ class AdminProductController extends Controller
         } catch (ModelNotFoundException $e) {
             echo 'Registro não localizado para ser deletado';
         }
+    }
+
+    /**
+     * @param $strTagField
+     * @param Product $product
+     * @return array
+     */
+    private function handleTags($strTagField, Product $product)
+    {
+        $arrTags = explode(',',$strTagField);
+        $objTag = new Tag();
+        $arrTagID = [];
+        if (count($arrTags) > 0)
+        {
+            foreach ($arrTags as $tagName)
+            {
+                $tag = $objTag->where('name', '=', $tagName)->get();
+                if ($tag->count() === 0)
+                {
+                    $createdTag = Tag::create(['name' => $tagName]);
+                    $arrTagID[] = $createdTag->id;
+                }
+                else
+                {
+                    $arrTagID[] = $tag[0]->id;
+                }
+            }
+        }
+
+        return $arrTagID;
     }
 
     /**
@@ -114,7 +155,7 @@ class AdminProductController extends Controller
 
         $image = $productImage::create(['product_id' => $id, 'extension' => $extension]);
 
-        Storage::disk('public_local')->put($image->id . '.' . $extension, File::get($file));
+        Storage::disk('public_local')->put($image->full_name, File::get($file));
 
         return redirect()->route('admin.product.image.index', ['id' => $id]);
     }
@@ -123,11 +164,10 @@ class AdminProductController extends Controller
     {
         try {
             $image = $productImage->findOrFail($id);
-            $imageName = $image->id . '.' . $image->extension;
 
             //Unlink the image
-            if (file_exists(public_path('/uploads/' . $imageName)))
-                Storage::disk('public_local')->delete($imageName);
+            if (file_exists(public_path('/uploads/' . $image->full_name)))
+                Storage::disk('public_local')->delete($image->full_name);
 
             $product = $image->product;
             $image->delete();
