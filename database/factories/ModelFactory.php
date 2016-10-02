@@ -25,9 +25,11 @@ $factory->define(User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(Category::class, function (Faker\Generator $faker) {
+    $categoryName = $faker->sentence(2);
     return [
-        'name' => $faker->word,
+        'name' => $categoryName,
         'description' => $faker->sentence,
+        'slug' => str_slug($categoryName, '-'),
     ];
 });
 
@@ -36,7 +38,7 @@ $factory->define(Product::class, function (Faker\Generator $faker) {
         'name' => $faker->word,
         'description' => $faker->sentence,
         'price' => $faker->randomFloat(2, 20, 500),
-        'featured' => $faker->boolean,
-        'recommend' => $faker->boolean,
+        'featured' => $faker->boolean(30),
+        'recommend' => $faker->boolean(),
     ];
 });

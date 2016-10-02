@@ -10,7 +10,8 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+Route::get('/', 'StoreController@index');
+Route::get('category/{slug}', 'StoreController@showProductsFromCategory')->name('category.index');
 //Route::pattern('id', '\d+');
 Route::group(['prefix' => 'admin'], function(){
 

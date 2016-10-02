@@ -16,8 +16,8 @@ class CategoriesTableSeeder extends Seeder
         DB::table('products')->delete();
         DB::table('categories')->delete();
         
-        factory(Category::class, 30)->create()->each(function (Category $createdCategory) {
-            for ($i = 0; $i < 5; $i++) {
+        factory(Category::class, 7)->create()->each(function (Category $createdCategory) {
+            for ($i = 0; $i < 6; $i++) {
                 $productModel = factory(Product::class)->make();
                 $createdCategory->products()->save($productModel);
             }

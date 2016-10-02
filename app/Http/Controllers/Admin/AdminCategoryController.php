@@ -42,7 +42,7 @@ class AdminCategoryController extends Controller
             $category = $this->category->findOrFail($id);
             return view('admin.category.update', compact('category'));
         } catch (ModelNotFoundException $e) {
-            echo 'Registro Não Localizado';
+            abort(404, 'Registro Não Localizado');
         }
     }
 
@@ -52,7 +52,7 @@ class AdminCategoryController extends Controller
             $this->category->findOrFail($id)->fill($request->all())->save();
             return redirect()->route('admin.category.index');
         } catch (ModelNotFoundException $e) {
-            echo 'Registro não localizado para ser editado';
+            abort(404, 'Registro não localizado para ser editado');
         }
     }
 
@@ -66,7 +66,7 @@ class AdminCategoryController extends Controller
                 $category->delete();
             return redirect()->route('admin.category.index');
         } catch (ModelNotFoundException $e) {
-            echo 'Registro não localizado para ser deletado';
+            abort(404, 'Registro não localizado para ser deletado');
         }
 
     }

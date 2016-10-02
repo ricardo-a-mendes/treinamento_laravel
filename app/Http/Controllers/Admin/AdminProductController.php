@@ -59,7 +59,7 @@ class AdminProductController extends Controller
             $product = $this->product->findOrFail($id);
             return view('admin.product.update', compact('product', 'categories'));
         } catch (ModelNotFoundException $e) {
-            echo 'Registro Não Localizado';
+            abort(404, 'Registro Não Localizado');
         }
     }
 
@@ -80,7 +80,7 @@ class AdminProductController extends Controller
 
             return redirect()->route('admin.product.index');
         } catch (ModelNotFoundException $e) {
-            echo 'Registro não localizado para ser editado';
+            abort(404, 'Registro não localizado para ser editado');
         }
     }
 
@@ -96,7 +96,7 @@ class AdminProductController extends Controller
             $product->delete();
             return redirect()->route('admin.product.index');
         } catch (ModelNotFoundException $e) {
-            echo 'Registro não localizado para ser deletado';
+            abort(404, 'Registro não localizado para ser deletado');
         }
     }
 
@@ -173,7 +173,7 @@ class AdminProductController extends Controller
             $image->delete();
             return redirect()->route('admin.product.image.index', ['id' => $product->id]);
         } catch (ModelNotFoundException $e) {
-            echo $e->getMessage();
+            abort(404);
         }
     }
 }

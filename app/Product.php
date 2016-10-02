@@ -2,6 +2,7 @@
 
 namespace CodeCommerce;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -21,6 +22,22 @@ class Product extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function scopeFeatured(Builder $query, $id = 0)
+    {
+        if ($id == 0)
+            return $query->where('featured', '=', 1);
+        else
+            return $query->where('featured', '=', 1)->where('category_id', '=', $id);
+    }
+
+    public function scopeRecommended(Builder $query, $id = 0)
+    {
+        if ($id == 0)
+            return $query->where('recommend', '=', 1);
+        else
+            return $query->where('recommend', '=', 1)->where('category_id', '=', $id);
     }
 
     public function getTagsAttribute()
