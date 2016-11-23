@@ -22,20 +22,27 @@ class StoreController extends Controller
 
     public function index()
     {
-        $featuredProducts = $this->product->featured()->get();
-        $recommendedProducts = $this->product->recommended()->get();
+        $featuredProducts = $this->product->ofFeatured()->get();
+        $recommendedProducts = $this->product->ofRecommended()->get();
         $categories = $this->category->all();
         return view('store.index', compact('categories', 'featuredProducts', 'recommendedProducts'));
     }
 
+    /**
+     * Get all products from a specific category
+     *
+     * @param $slug Represents a category
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showProductsFromCategory($slug)
     {
         try {
             $category = $this->category->where('slug', '=', $slug)->firstOrFail();
-            $featuredProducts = $this->product->featured($category->id)->get();
-            $recommendedProducts = $this->product->recommended($category->id)->get();
+            $featuredProducts = $this->product->ofFeatured($category->id)->get();
+            $recommendedProducts = $this->product->ofRecommended($category->id)->get();
             $categories = $this->category->all();
-            return view('store.index', compact('categories', 'featuredProducts', 'recommendedProducts'));
+
+            return view('store.index', compact('categories', 'featuredProducts', 'recommendedProducts', 'category'));
         } catch (ModelNotFoundException $e) {
             abort(404, 'Categoria não encontrada.');
         }

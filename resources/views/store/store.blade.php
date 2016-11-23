@@ -102,14 +102,19 @@
 
 
 <section>
-    <div class="container">
-        <div class="row">
 
-            @yield('categories_sidebar')
-            @yield('content')
+    <ol class="breadcrumb">
+        <li><a href="{{route('home')}}">Home</a></li>
+        @yield('breadcrumb')
+    </ol>
+
+    <div class="row">
+
+        @yield('categories_sidebar')
+        @yield('content')
 
 
-        </div>
+    </div>
     </div>
     <div class="common-modal modal fade" id="common-Modal1" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
@@ -122,9 +127,6 @@
 </section>
 
 <footer id="footer"><!--Footer-->
-
-
-
 
     <div class="footer-bottom">
         <div class="container">
