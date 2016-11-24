@@ -26,24 +26,32 @@ class Product extends Model
 
     public function scopeOfFeatured(Builder $query, $id = 0)
     {
-        if ($id == 0 || $id == '')
+        if ($id == 0 || $id == '') {
             return $query->where('featured', '=', 1);
-        else
+        } else {
             return $query->where([
                 ['featured', 1],
                 ['category_id', $id]
             ]);
+        }
     }
 
     public function scopeOfRecommended(Builder $query, $id = 0)
     {
-        if ($id == 0 || $id == '')
+        if ($id == 0 || $id == '') {
             return $query->where('recommend', '=', 1);
-        else
+        } else {
             return $query->where([
                 ['recommend', '=', 1],
                 ['category_id', '=', $id]
             ]);
+        }
+    }
+
+    public function scopeOfTagged(Builder $query, $id = 0)
+    {
+        return $query->join('product_tag', 'product_tag.product_id', '=', 'products.id')
+            ->where('product_tag.tag_id', $id);
     }
 
     public function getTagsAttribute()

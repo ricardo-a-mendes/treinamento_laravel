@@ -13,6 +13,7 @@
 
 use CodeCommerce\Category;
 use CodeCommerce\Product;
+use CodeCommerce\Tag;
 use CodeCommerce\User;
 
 $factory->define(User::class, function (Faker\Generator $faker) {
@@ -40,5 +41,11 @@ $factory->define(Product::class, function (Faker\Generator $faker) {
         'price' => $faker->randomFloat(2, 20, 500),
         'featured' => $faker->boolean(30),
         'recommend' => $faker->boolean(),
+    ];
+});
+
+$factory->define(Tag::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
     ];
 });
