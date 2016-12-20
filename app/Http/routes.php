@@ -14,6 +14,8 @@ Route::get('/', 'StoreController@index')->name('home');
 Route::get('category/{slug}', 'StoreController@showProductsFromCategory')->name('category.index');
 Route::get('product/{id}', 'StoreController@product')->name('product.show');
 Route::get('tagged-product/{tagId}', 'StoreController@showProductsFromTag')->name('tagged.product.show');
+Route::get('cart', 'CartController@index')->name('cart');
+Route::get('cart/add/{id}', 'CartController@add')->name('cart.add');
 
 //Route::pattern('id', '\d+');
 Route::group(['prefix' => 'admin'], function(){
