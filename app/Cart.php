@@ -31,6 +31,12 @@ class Cart
         return $this->items;
     }
 
+    public function updateQuantity($productID, $quantity)
+    {
+        if (key_exists($productID, $this->items))
+            $this->items[$productID]['qtde'] = (int) $quantity;
+    }
+
     public function getTotal()
     {
         $total = 0;

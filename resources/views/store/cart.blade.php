@@ -16,19 +16,55 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($cart->all() as $productId => $item)
+                    {!! Form::open(['route' => ['cart.update'], 'method' => 'POST']) !!}
+                    @forelse($cart->all() as $productId => $item)
                     <tr>
                         <td class="cart_product"><a href="#" >Imagem</a></td>
                         <td class="cart_description"><h4><a href="{{route('product.show', ['id' => $productId])}}">{{$item['name']}}</a></h4></td>
                         <td class="cart_price">R$ {{$item['price']}}</td>
-                        <td class="cart_quantity">{{$item['qtde']}}</td>
+                        <td class="cart_quantity">
+                            <div class="form-group col-xs-3">
+                                {!! Form::number('qtde['.$productId.']', $item['qtde'], ['min'=>1, 'step' => 1, 'class' => 'form-control']) !!}
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <a href="#" class="glyphicon glyphicon-repeat updateQuantity"></a>
+                            </div>
+                        </td>
                         <td class="cart_total">{{$item['qtde']*$item['price']}}</td>
-                        <td class="cart_delete"><a href="#">Delete</a></td>
+                        <td class="cart_delete"><a href="{{route('cart.destroy', ['id' => $productId])}}">Delete</a></td>
                     </tr>
-                        @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="6"><p>Nenhum item encontrado</p></td>
+                        </tr>
+                    @endforelse
+                    {!! Form::close() !!}
                     </tbody>
+                    <tr class="cart_menu">
+                        <td colspan="5">
+                            <div class="pull-right">
+                                <span>TOTAL: {{$cart->getTotal()}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="">
+                                <button class="btn btn-success">Fechar Compra</button>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
     </section>
+@endsection
+@section('js')
+<script type="text/javascript">
+    $(function () {
+
+        $('.updateQuantity').click(function () {
+            $('form').submit();
+        });
+
+    });
+</script>
 @endsection
