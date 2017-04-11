@@ -14,13 +14,16 @@ Route::get('/', 'StoreController@index')->name('home');
 Route::get('category/{slug}', 'StoreController@showProductsFromCategory')->name('category.index');
 Route::get('product/{id}', 'StoreController@product')->name('product.show');
 Route::get('tagged-product/{tagId}', 'StoreController@showProductsFromTag')->name('tagged.product.show');
+
 Route::get('cart', 'CartController@index')->name('cart');
 Route::post('cart', 'CartController@updateQuantity')->name('cart.update');
 Route::get('cart/add/{id}', 'CartController@add')->name('cart.add');
 Route::get('cart/destroy/{id}', 'CartController@destroy')->name('cart.destroy');
 
+Route::get('checkout/placeOrder', 'CheckoutController@place')->name('checkout.place')->middleware('auth');
+
 //Route::pattern('id', '\d+');
-Route::group(['prefix' => 'admin'], function(){
+Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin', 'where' => ['id' => '\d+']], function(){
 
     #Categories
     Route::group(['prefix' => 'category'], function() {
