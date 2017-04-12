@@ -22,7 +22,12 @@ Route::get('cart/destroy/{id}', 'CartController@destroy')->name('cart.destroy');
 
 Route::get('checkout/placeOrder', 'CheckoutController@place')->name('checkout.place')->middleware('auth');
 
+
 //Route::pattern('id', '\d+');
+Route::group(['prefix' => 'account', 'middleware' => 'auth'], function(){
+	Route::get('orders', 'AccountController@orders')->name('account.orders');
+});
+
 Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin', 'where' => ['id' => '\d+']], function(){
 
     #Categories
@@ -56,6 +61,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin', 'where' => ['id
     });
 });
 
-Route::auth();
+// Authentication Routes...
+$this->get('login', 'Auth\AuthController@showLoginForm')->name('login');
+$this->post('login', 'Auth\AuthController@login');
+$this->get('logout', 'Auth\AuthController@logout')->name('logout');
+
+// Registration Routes...
+$this->get('register', 'Auth\AuthController@showRegistrationForm')->name('register');
+$this->post('register', 'Auth\AuthController@register');
+
+// Password Reset Routes...
+$this->get('password/reset/{token?}', 'Auth\PasswordController@showResetForm')->name('reset');
+$this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
+$this->post('password/reset', 'Auth\PasswordController@reset');
 
 Route::get('/home', 'HomeController@index');
