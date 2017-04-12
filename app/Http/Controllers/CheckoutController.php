@@ -10,13 +10,22 @@ use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
+	/**
+	 * @param Order $orderModel
+	 * @param OrderItem $orderItem
+	 * @return bool
+	 */
 	public function place(Order $orderModel, OrderItem $orderItem) {
-		if (!Session::has('cart')) {
+		if (!Session::has('cart'))
 			return false;
-		}
 
+		/**
+		 * @var $cart Cart
+		 */
 		$cart = Session::get('cart');
-		if ($cart instanceof Cart)
+
+		if (!$cart instanceof Cart)
+			return false;
 
 		if ($cart->getTotal() > 0) {
 			$order = $orderModel->create(['user_id' => Auth::id(), 'total' => $cart->getTotal()]);

@@ -48,7 +48,7 @@
                         </td>
                         <td>
                             <div class="">
-                                <button class="btn btn-success">Fechar Compra</button>
+                                <a href="{{route('checkout.place')}}" class="btn btn-success">Fechar Compra</a>
                             </div>
                         </td>
                     </tr>
