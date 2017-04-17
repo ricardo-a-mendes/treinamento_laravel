@@ -2,8 +2,10 @@
 
 namespace CodeCommerce\Http\Controllers\Auth;
 
-use CodeCommerce\User;
-use Validator;
+use CodeCommerce\Address;
+use CodeCommerce\Phone;
+use CodeCommerce\User;use Validator;
+
 use CodeCommerce\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -52,6 +54,11 @@ class AuthController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
+            'phone' => 'required|min:6',
+            'address' => 'required|min:3',
+            'number' => 'required',
+            'city' => 'required|min:3',
+            'state' => 'required|min:2',
         ]);
     }
 
@@ -63,10 +70,24 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+		$user->addresses()->create([
+			'address' => $data['address'],
+			'number' => $data['number'],
+			'complement' => $data['complement'],
+			'city' => $data['city'],
+			'state' => $data['state']
+		]);
+
+		$user->phones()->create([
+			'number' => $data['phone']
+		]);
+
+		return $user;
     }
 }

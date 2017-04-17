@@ -30,6 +30,10 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function(){
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin', 'where' => ['id' => '\d+']], function(){
 
+	Route::get('', 'Admin\AdminController@index')->name('admin.index');
+	Route::get('orders', 'Admin\AdminController@listOrders')->name('admin.orders.index');
+	Route::get('orders/update/{orderID}/{statusID}', 'Admin\AdminController@changeStatus')->name('admin.orders.update');
+
     #Categories
     Route::group(['prefix' => 'category'], function() {
         Route::get('', 'Admin\AdminCategoryController@index')->name('admin.category.index');

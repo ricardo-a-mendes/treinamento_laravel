@@ -29,7 +29,7 @@ class CheckoutController extends Controller
 			return false;
 
 		if ($cart->getTotal() > 0) {
-			$order = $orderModel->create(['user_id' => Auth::id(), 'total' => $cart->getTotal()]);
+			$order = $orderModel->create(['user_id' => Auth::id(), 'status_id' => 1, 'total' => $cart->getTotal()]);
 			foreach($cart->all() as $productId => $cartItem) {
 				$order->items()->create([
 					'product_id' => $productId,
