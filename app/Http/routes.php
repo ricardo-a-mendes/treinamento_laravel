@@ -21,6 +21,9 @@ Route::get('cart/add/{id}', 'CartController@add')->name('cart.add');
 Route::get('cart/destroy/{id}', 'CartController@destroy')->name('cart.destroy');
 
 Route::get('checkout/placeOrder', 'CheckoutController@place')->name('checkout.place')->middleware('auth');
+Route::get('test', 'CheckoutController@pagSeguro')->name('checkout.pagseguro');
+Route::get('retorno-pagseguro', 'PagSeguroController@retorno')->name('pagseguro.retorno');
+Route::post('notificacao-transacoes', 'PagSeguroController@notificacao')->name('pagseguro.notificacao');
 
 
 //Route::pattern('id', '\d+');

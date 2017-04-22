@@ -17,6 +17,7 @@ class CreateOrdersTable extends Migration
 			$table->integer('user_id')->unsigned();
 			$table->foreign('user_id')->references('id')->on('users');
 			$table->decimal('total', 10, 2);
+			$table->string('payment_code')->nullable();
 			$table->integer('status_id')->unsigned();
 			$table->foreign('status_id')->references('id')->on('statuses');
             $table->timestamps();

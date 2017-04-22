@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "twbs/bootstrap": "^3.3",
-        "laravelcollective/html": "5.2.*"
+        "laravelcollective/html": "5.2.*",
+        "wesleywillians/laravel-pagseguro": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -48,5 +49,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "minimum-stability": "dev"
 }
