@@ -17,7 +17,7 @@
                     </thead>
                     <tbody>
                     {!! Form::open(['route' => ['cart.update'], 'method' => 'POST']) !!}
-                    @forelse($cart->all() as $productId => $item)
+                    @forelse($cart->getAll() as $productId => $item)
                     <tr>
                         <td class="cart_product"><a href="#" >Imagem</a></td>
                         <td class="cart_description"><h4><a href="{{route('product.show', ['id' => $productId])}}">{{$item['name']}}</a></h4></td>

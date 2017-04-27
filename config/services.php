@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => CodeCommerce\User::class,
+        'model' => CodeCommerce\Entities\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],

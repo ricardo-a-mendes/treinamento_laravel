@@ -11,10 +11,10 @@
 |
 */
 
-use CodeCommerce\Category;
-use CodeCommerce\Product;
-use CodeCommerce\Tag;
-use CodeCommerce\User;
+use CodeCommerce\Entities\Category;
+use CodeCommerce\Entities\Product;
+use CodeCommerce\Entities\Tag;
+use CodeCommerce\Entities\User;
 
 $factory->define(User::class, function (Faker\Generator $faker) {
     return [

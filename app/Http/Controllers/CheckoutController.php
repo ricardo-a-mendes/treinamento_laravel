@@ -6,6 +6,7 @@ use CodeCommerce\Cart;
 use CodeCommerce\Events\CheckoutEvent;
 use CodeCommerce\Order;
 use CodeCommerce\OrderItem;
+use CodeCommerce\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use PHPSC\PagSeguro\Items\Item;
@@ -14,11 +15,11 @@ use PHPSC\PagSeguro\Requests\Checkout\CheckoutService;
 class CheckoutController extends Controller
 {
 	/**
-	 * @param Order $orderModel
-	 * @param OrderItem $orderItem
-	 * @return bool
+	 * @param OrderRepository $orderModel
+	 * @param CheckoutService $checkoutService
+	 * @return bool|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
 	 */
-	public function place(Order $orderModel, OrderItem $orderItem, CheckoutService $checkoutService) {
+	public function place(OrderRepository $orderModel, CheckoutService $checkoutService) {
 		if (!Session::has('cart'))
 			return false;
 
@@ -59,6 +60,10 @@ class CheckoutController extends Controller
 		return view('store.checkout', ['cart' => 'empty']);
     }
 
+	/**
+	 * @param CheckoutService $checkoutService
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 */
 	public function pagSeguro(CheckoutService $checkoutService) {
 		$checkout = $checkoutService->createCheckoutBuilder()
 			->setReference(12345)

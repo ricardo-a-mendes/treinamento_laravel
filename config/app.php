@@ -151,12 +151,16 @@ return [
         /*
          * Application Service Providers...
          */
+		Collective\Html\HtmlServiceProvider::class,
+		LaravelPagseguro\LaravelPagseguroServiceProvider::class,
+		Prettus\Repository\Providers\RepositoryServiceProvider::class,
+
         CodeCommerce\Providers\AppServiceProvider::class,
         CodeCommerce\Providers\AuthServiceProvider::class,
         CodeCommerce\Providers\EventServiceProvider::class,
+        CodeCommerce\Providers\RepositoryServiceProvider::class,
         CodeCommerce\Providers\RouteServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
-		LaravelPagseguro\LaravelPagseguroServiceProvider::class,
+
 
     ],
 

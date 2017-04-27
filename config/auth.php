@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => CodeCommerce\User::class,
+            'model' => CodeCommerce\Entities\User::class,
         ],
 
         // 'users' => [

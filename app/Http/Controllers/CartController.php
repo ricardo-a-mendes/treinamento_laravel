@@ -4,6 +4,8 @@ namespace CodeCommerce\Http\Controllers;
 
 use CodeCommerce\Cart;
 use CodeCommerce\Product;
+use CodeCommerce\Repositories\CartRepository;
+use CodeCommerce\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -22,7 +24,7 @@ class CartController extends Controller
      * CartController constructor.
      * @param Cart $cart
      */
-    public function __construct(Cart $cart)
+    public function __construct(CartRepository $cart)
     {
         $this->cart = $cart;
     }
@@ -32,14 +34,14 @@ class CartController extends Controller
         if(!Session::has('cart'))
             Session::set('cart', $this->cart);
 
-        return view('store.cart', ['cart' => Session::get('cart')]);
+		return view('store.cart', ['cart' => Session::get('cart')]);
     }
 
-    public function add($id)
+    public function add(ProductRepository $productRepository, $id)
     {
         $cart = $this->getCart();
 
-        $product = Product::find($id);
+        $product = $productRepository->find($id);
         $cart->add($id, $product->name, $product->price);
 
         Session::set('cart', $cart);

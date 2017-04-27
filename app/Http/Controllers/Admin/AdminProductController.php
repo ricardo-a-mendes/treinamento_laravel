@@ -2,14 +2,13 @@
 
 namespace CodeCommerce\Http\Controllers\Admin;
 
-
-use CodeCommerce\Category;
 use CodeCommerce\Http\Controllers\Controller;
-use CodeCommerce\Http\Requests;
 use CodeCommerce\Http\Requests\Admin\ProductImageRequest;
-use CodeCommerce\Product;
-use CodeCommerce\ProductImage;
-use CodeCommerce\Tag;
+use CodeCommerce\Http\Requests\Admin\ProductRequest;
+use CodeCommerce\Repositories\CategoryRepository;
+use CodeCommerce\Repositories\ProductImageRepository;
+use CodeCommerce\Repositories\ProductRepository;
+use CodeCommerce\Repositories\TagRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +17,7 @@ class AdminProductController extends Controller
 {
     private $product;
 
-    public function __construct(Product $product)
+    public function __construct(ProductRepository $product)
     {
         $this->product = $product;
     }
@@ -29,13 +28,13 @@ class AdminProductController extends Controller
         return view('admin.product.index', compact('products'));
     }
 
-    public function create(Category $category)
+    public function create(CategoryRepository $category)
     {
         $categories = $category->lists('name', 'id');
         return view('admin.product.create', compact('categories'));
     }
 
-    public function store(Requests\Admin\ProductRequest $request)
+    public function store(ProductRequest $request, TagRepository $tagRepository)
     {
         $dataCreate = $request->all();
 
@@ -46,13 +45,13 @@ class AdminProductController extends Controller
         $product = $this->product->fill($dataCreate);
         $product->save();
 
-        $arrTagID = $this->handleTags($request->input('tags'), $product);
+        $arrTagID = $this->handleTags($request->input('tags'), $tagRepository);
         $product->tags()->sync($arrTagID);
 
         return redirect()->route('admin.product.index');
     }
 
-    public function edit(Category $category, $id)
+    public function edit(CategoryRepository $category, $id)
     {
         try {
             $categories = $category->lists('name', 'id');
@@ -63,7 +62,7 @@ class AdminProductController extends Controller
         }
     }
 
-    public function update(Requests\Admin\ProductRequest $request, $id)
+    public function update(ProductRequest $request, TagRepository $tagRepository, $id)
     {
         try {
             $dataUpdate = $request->all();
@@ -75,7 +74,7 @@ class AdminProductController extends Controller
             $product = $this->product->findOrFail($id)->fill($dataUpdate);
             $product->save();
 
-            $arrTagID = $this->handleTags($request->input('tags'), $product);
+            $arrTagID = $this->handleTags($request->input('tags'), $tagRepository);
             $product->tags()->sync($arrTagID);
 
             return redirect()->route('admin.product.index');
@@ -102,22 +101,20 @@ class AdminProductController extends Controller
 
     /**
      * @param $strTagField
-     * @param Product $product
      * @return array
      */
-    private function handleTags($strTagField, Product $product)
+    private function handleTags($strTagField, TagRepository $tagRepository)
     {
         $arrTags = explode(',',$strTagField);
-        $objTag = new Tag();
         $arrTagID = [];
         if (count($arrTags) > 0)
         {
             foreach ($arrTags as $tagName)
             {
-                $tag = $objTag->where('name', '=', $tagName)->get();
+                $tag = $tagRepository->findByField('name', $tagName);
                 if ($tag->count() === 0)
                 {
-                    $createdTag = Tag::create(['name' => $tagName]);
+                    $createdTag = $tagRepository->create(['name' => $tagName]);
                     $arrTagID[] = $createdTag->id;
                 }
                 else
@@ -148,7 +145,7 @@ class AdminProductController extends Controller
         return view('admin.product.create_image', compact('product'));
     }
 
-    public function storeImage(ProductImageRequest $request, $id, ProductImage $productImage)
+    public function storeImage(ProductImageRequest $request, $id, ProductImageRepository $productImage)
     {
         $file = $request->file('image');
         $extension = $file->getClientOriginalExtension();
@@ -160,7 +157,7 @@ class AdminProductController extends Controller
         return redirect()->route('admin.product.image.index', ['id' => $id]);
     }
 
-    public function destroyImage(ProductImage $productImage, $id)
+    public function destroyImage(ProductImageRepository $productImage, $id)
     {
         try {
             $image = $productImage->findOrFail($id);

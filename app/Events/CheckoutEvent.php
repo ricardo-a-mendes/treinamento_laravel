@@ -2,11 +2,9 @@
 
 namespace CodeCommerce\Events;
 
-use CodeCommerce\Events\Event;
-use CodeCommerce\Order;
-use CodeCommerce\User;
+use CodeCommerce\Repositories\OrderRepository;
+use CodeCommerce\Repositories\UserRepository;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class CheckoutEvent extends Event
 {
@@ -29,7 +27,7 @@ class CheckoutEvent extends Event
      *
      * @return void
      */
-    public function __construct(User $user, Order $order)
+    public function __construct(UserRepository $user, OrderRepository $order)
     {
         $this->user = $user;
 		$this->order = $order;

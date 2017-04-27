@@ -5,6 +5,8 @@ namespace CodeCommerce\Http\Controllers\Admin;
 use CodeCommerce\Http\Controllers\Controller;
 use CodeCommerce\Http\Requests\Admin\AdminRequest;
 use CodeCommerce\Order;
+use CodeCommerce\Repositories\OrderRepository;
+use CodeCommerce\Repositories\StatusRepository;
 use CodeCommerce\Status;
 use Validator;
 
@@ -20,7 +22,7 @@ class AdminController extends Controller
 	 */
 	private $status;
 
-	public function __construct(Order $order, Status $status) {
+	public function __construct(OrderRepository $order, StatusRepository $status) {
 		$this->order = $order;
 		$this->status = $status;
 	}

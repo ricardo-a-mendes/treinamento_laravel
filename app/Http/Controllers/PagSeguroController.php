@@ -3,6 +3,7 @@
 namespace CodeCommerce\Http\Controllers;
 
 use CodeCommerce\Order;
+use CodeCommerce\Repositories\OrderRepository;
 use Illuminate\Http\Request;
 use PHPSC\PagSeguro\Purchases\Transactions\Locator;
 
@@ -20,7 +21,7 @@ class PagSeguroController extends Controller
 	 * @param null $transaction_id
 	 * @return string
 	 */
-	public function retorno(Request $request, Locator $locator, Order $orderModel) {
+	public function retorno(Request $request, Locator $locator, OrderRepository $orderModel) {
 		/*
 		 * Status PagSeguro
 		1	Aguardando pagamento: o comprador iniciou a transação, mas até o momento o PagSeguro não recebeu nenhuma informação sobre o pagamento.

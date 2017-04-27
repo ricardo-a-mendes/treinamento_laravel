@@ -2,19 +2,17 @@
 
 namespace CodeCommerce\Http\Controllers\Admin;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-
-use CodeCommerce\Http\Requests;
 use CodeCommerce\Category;
 use CodeCommerce\Http\Controllers\Controller;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use CodeCommerce\Http\Requests\Admin\CategoryRequest;
+use CodeCommerce\Repositories\CategoryRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AdminCategoryController extends Controller
 {
     private $category;
 
-    public function __construct(Category $category)
+    public function __construct(CategoryRepository $category)
     {
         $this->category = $category;
     }
@@ -30,7 +28,7 @@ class AdminCategoryController extends Controller
         return view('admin.category.create');
     }
 
-    public function store(Requests\Admin\CategoryRequest $request)
+    public function store(CategoryRequest $request)
     {
         $this->category->fill($request->all())->save();
         return redirect()->route('admin.category.index');
@@ -46,7 +44,7 @@ class AdminCategoryController extends Controller
         }
     }
 
-    public function update(Requests\Admin\CategoryRequest $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
         try {
             $this->category->findOrFail($id)->fill($request->all())->save();

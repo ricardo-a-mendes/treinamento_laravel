@@ -1,0 +1,8 @@
+1 - Criar interface para as models
+1.1 - Substituir os injections das models pelas suas interfaces
+
+
+2 - Traduzir o software
+
+
+3 - Implementar Teste (PHPUnit)

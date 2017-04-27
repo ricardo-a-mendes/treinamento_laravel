@@ -2,20 +2,17 @@
 
 namespace CodeCommerce\Http\Controllers;
 
-use CodeCommerce\Category;
-use CodeCommerce\Product;
-use CodeCommerce\Tag;
+use CodeCommerce\Repositories\CategoryRepository;
+use CodeCommerce\Repositories\ProductRepository;
+use CodeCommerce\Repositories\TagRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-
-use CodeCommerce\Http\Requests;
 
 class StoreController extends Controller
 {
     public $category;
     public $product;
 
-    public function __construct(Category $category, Product $product)
+    public function __construct(CategoryRepository $category, ProductRepository $product)
     {
         $this->category = $category;
         $this->product = $product;
@@ -23,8 +20,8 @@ class StoreController extends Controller
 
     public function index()
     {
-        $featuredProducts = $this->product->ofFeatured()->get();
-        $recommendedProducts = $this->product->ofRecommended()->get();
+        $featuredProducts = $this->product->getFeatured();
+        $recommendedProducts = $this->product->getRecommended();
         $categories = $this->category->all();
         return view('store.index', compact('categories', 'featuredProducts', 'recommendedProducts'));
     }
@@ -38,22 +35,21 @@ class StoreController extends Controller
     public function showProductsFromCategory($slug)
     {
         try {
-            $category = $this->category->where('slug', '=', $slug)->firstOrFail();
-            $featuredProducts = $this->product->ofFeatured($category->id)->get();
-            $recommendedProducts = $this->product->ofRecommended($category->id)->get();
+            $category = $this->category->findByField('slug', $slug)->first();
+            $featuredProducts = $this->product->getFeatured($category->id);
+            $recommendedProducts =$this->product->getRecommended($category->id);
             $categories = $this->category->all();
 
             return view('store.index', compact('categories', 'featuredProducts', 'recommendedProducts', 'category'));
         } catch (ModelNotFoundException $e) {
             abort(404, 'Categoria não encontrada.');
         }
-
     }
 
     public function product($id)
     {
         $categories = $this->category->all();
-        $product = $this->product->findOrFail($id);
+        $product = $this->product->find($id);
 
         return view('store.product', compact('categories', 'product'));
     }
@@ -64,10 +60,10 @@ class StoreController extends Controller
      * @param $tagID Tag ID to find products
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showProductsFromTag(Tag $tag, $tagID)
+    public function showProductsFromTag(TagRepository $tag, $tagID)
     {
         try {
-            $taggedProducts = $this->product->OfTagged($tagID)->get();
+            $taggedProducts = $this->product->getTagged($tagID);
             $categories = $this->category->all();
             $selectedTag = $tag->find($tagID);
 
